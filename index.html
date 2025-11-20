@@ -1,0 +1,145 @@
+<html>
+    <head>
+        <title>Module 5</title>
+        <style>
+            .error {
+                border-color: red;
+                background-color: red;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- <form name="example" action="/submit" method="post"> -->
+        <form name="example" onsubmit="return validateForm()">
+            <label for="name">Ім’я:</label>
+            <input type="text" id="name" name="username" placeholder="Введіть ім’я" required>
+            <div id="name_output" class="error"></div><br>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required><br><br>
+
+            <label for="pass">Пароль:</label>
+            <input type="password" id="pass" name="password" required><br><br>
+
+
+            <p>Стать:</p>
+            <input type="radio" id="male" name="gender" value="male" required>
+            <label for="male">Чоловіча</label>
+            <input type="radio" id="female" name="gender" value="female" required>
+            <label for="female">Жіноча</label><br><br>
+
+            <p>Інтереси:</p>
+            <input type="checkbox" id="music" name="interest" value="music">
+            <label for="music">Музика</label>
+
+            <input type="checkbox" id="sport" name="interest" value="sport">
+            <label for="sport">Спорт</label><br><br>
+
+
+            <label for="city">Місто:</label>
+            <select id="city" name="city" multiple>
+                <option value="kyiv" selected>Київ</option>
+                <option value="lviv" selected>Львів</option>
+                <option value="odesa">Одеса</option>
+            </select><br><br>
+
+            <label for="message">Повідомлення:</label><br>
+            <textarea id="message" name="message" rows="4" cols="40"></textarea><br><br>
+
+            <input type="submit" value="Надіслати">
+            <input type="reset" value="Очистити">
+            <input type="button" value="Перевірити" name="verifyBtn">
+            <!-- <button>Очистити</button> -->
+
+            <p id="output"></p>
+        </form>
+        <script>
+            // getting form with name example
+            let exampleForm = document.forms.example;
+            const output = document.getElementById('output');
+            let genderRadios = exampleForm.gender;
+            genderRadios.forEach(radio => {
+                radio.addEventListener('change', (event) => {
+                    output.textContent = `You selected: ${event.target.value}`;
+                });
+            });
+            
+            function validateForm() {
+                if (exampleForm.username.value === "" || exampleForm.password.value === "") {
+                    alert("Будь ласка, заповніть усі поля!");
+                    return false;
+                }
+                alert("Форма надіслана!");
+                return true;
+            }
+            
+            let messageBox = exampleForm.message;
+            // let verifyBtn = exampleForm["verifyBtn"];
+            // let verifyBtn = exampleForm.elements.verifyBtn;
+            // let verifyBtn = exampleForm.elements["verifyBtn"];
+            // let verifyBtn = exampleForm.elements[0];
+            let verifyBtn = exampleForm.verifyBtn;
+            verifyBtn.addEventListener("click", event => {
+                console.clear();
+                console.log("verifyBtn clicked");
+                console.log(`username: ${exampleForm.username.value}`);
+                console.log(`email: ${exampleForm.email.value}`);
+                console.log(`password: ${exampleForm.password.value}`);
+                console.log(`gender: ${exampleForm.gender.value}`);
+                let selectedInterest = Array.from(exampleForm.interest)
+                                        .filter(checkBox => checkBox.checked)
+                                        .map(checkBox => checkBox.value);
+                
+                // let checkedItems = Array.from(exampleForm.interest)
+                //                     .filter(checkBox => checkBox.checked);
+                // // map implementation
+                // let lambda = item => item.value;
+                // let result = [];
+                // for(let item of checkedItems)
+                // {
+                //     result.push(lambda(item));
+                // }
+                console.log(`interest: ${selectedInterest}`);
+                
+                // console.log(`seleted city index: ${exampleForm.city.selectedIndex}`);
+                // console.log(`selected city: ${exampleForm.city.value}`);
+                // console.log(`city options: ${exampleForm.city.options}`);
+
+                // for multiple select
+                let selectedCity = Array.from(exampleForm.city)
+                                        .filter(city => city.selected)
+                                        .map(city => city.value);
+                console.log(`city: ${selectedCity}`);
+                
+                console.log(`message: ${messageBox.value}`);
+            });
+
+            messageBox.addEventListener("focus", event => {
+                console.log("focus");
+                messageBox.classList.remove("error");
+            });
+
+            messageBox.addEventListener("blur", event => {
+                console.log("blur");
+                if(!messageBox.value.includes("Hello"))
+                    messageBox.classList.add("error");
+            });
+
+            let nameField = exampleForm.username;
+            nameField.addEventListener("input", event => {
+                console.log("input");
+                if(nameField.value.includes('_'))
+                {
+                    name_output.innerHTML = "Your name has invalid symbols";
+                }
+            });
+
+            let verifyBtn = exampleForm.verifyBtn;
+            verifyBtn.addEventListener('click', event => {
+               // /hello/.test("Hello world");
+               let regExp = /hello/i;
+               console.log(regExp.test("Hello world"));
+            });
+        </script>
+    </body>
+</html>

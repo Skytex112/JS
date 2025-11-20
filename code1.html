@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Форма логіна</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+    }
+    .form-container {
+      max-width: 300px;
+      margin: auto;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+    }
+    .checkbox {
+      margin-top: 10px;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px;
+      width: 100%;
+    }
+    .message {
+      margin-top: 20px;
+      font-weight: bold;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2>Логін</h2>
+    <form id="loginForm">
+      <label for="login">Ваш логін:</label>
+      <input type="text" id="login" name="login" required>
+
+      <label for="password">Ваш пароль:</label>
+      <input type="password" id="password" name="password" required>
+
+      <label class="checkbox">
+        <input type="checkbox" id="rememberMe"> Запам’ятати мене
+      </label>
+
+      <button type="submit">Увійти</button>
+      <p><a href="#">Забули пароль?</a></p>
+    </form>
+
+    <div class="message" id="message"></div>
+  </div>
+
+  <script>
+  document.getElementById('loginForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const name = document.getElementById('login').value.trim();
+    const password = document.getElementById('password').value;
+    const remember = document.getElementById('rememberMe').checked;
+    const messageEl = document.getElementById('message');
+
+    if (name.length < 3) {
+      messageEl.textContent = 'Логін має містити щонайменше 3 символи.';
+      messageEl.style.color = 'red';
+      return;
+    }
+
+    const hasNumber = /\d/.test(password);
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+    if (password.length < 6 || !hasNumber || !hasSpecialChar) {
+      messageEl.textContent = 'Пароль має містити щонайменше 6 символів, хоча б одну цифру і один спецсимвол.';
+      messageEl.style.color = 'red';
+      return;
+    }
+
+
+    const message = remember
+      ? `Привіт, ${name}! Я тебе запам’ятав завдяки галці.`
+      : `Привіт, ${name}!`;
+
+    messageEl.textContent = message;
+    messageEl.style.color = 'green';
+  });
+</script>
+</body>
+</html>

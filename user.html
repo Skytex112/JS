@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Інформація користувача</title>
+  <script defer src="user.js"></script>
+</head>
+<body>
+  <h2>Інформація користувача</h2>
+  <form id="userForm">
+    <label>Ім'я:</label><br>
+    <input type="text" id="firstName"><br>
+
+    <label>Прізвище:</label><br>
+    <input type="text" id="lastName"><br>
+
+    <label>Рік народження:</label><br>
+    <input type="number" id="birthYear"><br>
+
+    <label>Стать:</label><br>
+    <select id="gender">
+      <option value="">Оберіть</option>
+      <option value="Чоловіча">Чоловіча</option>
+      <option value="Жіноча">Жіноча</option>
+    </select><br>
+
+    <label>Телефон:</label><br>
+    <input type="text" id="phone"><br>
+
+    <label>Skype:</label><br>
+    <input type="text" id="skype"><br><br>
+
+    <button type="button" id="saveBtn">Save</button>
+    <button type="button" id="exitBtn">Exit</button>
+  </form>
+  <div id="errors" style="color:red;"></div>
+</body>
+</html>

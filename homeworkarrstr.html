@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8" />
+    <title>JS Tasks – Console Style</title>
+    <style>
+        body {
+            font-family: Consolas, monospace;
+            background: #111;
+            color: #0f0;
+            padding: 20px;
+        }
+        button {
+            margin: 5px;
+            padding: 8px 15px;
+            background: #222;
+            color: #0f0;
+            border: 1px solid #0f0;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0f0;
+            color: #000;
+        }
+        #console {
+            margin-top: 20px;
+            padding: 15px;
+            background: #000;
+            border: 1px solid #0f0;
+            white-space: pre-wrap;
+            min-height: 200px;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>JavaScript Tasks – Console Mode</h2>
+
+    <!-- TASK 1 BUTTONS -->
+    <h3>Завдання 1 — Список покупок</h3>
+    <button onclick="showList()">Показати список</button>
+    <button onclick="addItemPrompt()">Додати товар</button>
+    <button onclick="buyItemPrompt()">Позначити купленим</button>
+
+    <!-- TASK 2 BUTTONS -->
+    <h3>Завдання 2 — Чек магазину</h3>
+    <button onclick="printReceipt()">Показати чек</button>
+    <button onclick="printTotal()">Загальна сума</button>
+    <button onclick="printMostExpensive()">Найдорожчий товар</button>
+    <button onclick="printAverage()">Середня ціна товарів</button>
+
+    <!-- TASK 3 BUTTONS -->
+    <h3>Завдання 3 — CSS стилі</h3>
+    <button onclick="printStyled()">Вивести стильовий текст</button>
+
+    <!-- TASK 4 BUTTONS -->
+    <h3>Завдання 4 — Аудиторії</h3>
+    <button onclick="showRooms()">Всі аудиторії</button>
+    <button onclick="showByFaculty()">Аудиторії факультету</button>
+    <button onclick="showForGroup()">Підходять для групи</button>
+    <button onclick="sortBySeatsPrint()">Сортувати за місцями</button>
+    <button onclick="sortByNamePrint()">Сортувати за назвою</button>
+
+    <!-- OUTPUT -->
+    <div id="console"></div>
+
+    <script>
+        function log(text) {
+            document.getElementById("console").textContent = text;
+        }
+
+        // TASK 1 – SHOPPING LIST
+        let shoppingList = [
+            { name: "Хліб", quantity: 1, bought: false },
+            { name: "Молоко", quantity: 2, bought: true },
+            { name: "Яйця", quantity: 10, bought: false }
+        ];
+
+        function showList() {
+            let sorted = [...shoppingList].sort((a, b) => a.bought - b.bought);
+            let out = "Список покупок:\n";
+            sorted.forEach(i => {
+                out += `${i.name} — ${i.quantity} шт. — ${i.bought ? "Куплено" : "Не куплено"}\n`;
+            });
+            log(out);
+        }
+
+        function addItemPrompt() {
+            let name = prompt("Назва товару:");
+            let q = +prompt("Кількість:");
+            addItem(name, q);
+            showList();
+        }
+
+        function addItem(name, quantity) {
+            let item = shoppingList.find(i => i.name.toLowerCase() === name.toLowerCase());
+            if (item) item.quantity += quantity;
+            else shoppingList.push({ name, quantity, bought: false });
+        }
+
+        function buyItemPrompt() {
+            let name = prompt("Що купили?");
+            buyItem(name);
+            showList();
+        }
+
+        function buyItem(name) {
+            let item = shoppingList.find(i => i.name.toLowerCase() === name.toLowerCase());
+            if (item) item.bought = true;
+        }
+
+        // TASK 2 – RECEIPT
+        let receipt = [
+            { name: "Хліб", quantity: 2, price: 20 },
+            { name: "Молоко", quantity: 1, price: 45 },
+            { name: "Сир", quantity: 1, price: 90 }
+        ];
+
+        function printReceipt() {
+            let out = "Чек:\n";
+            receipt.forEach(r => {
+                out += `${r.name} — ${r.quantity} × ${r.price} грн\n`;
+            });
+            log(out);
+        }
+
+        function totalSum() {
+            return receipt.reduce((s, i) => s + i.quantity * i.price, 0);
+        }
+
+        function printTotal() {
+            log("Загальна сума: " + totalSum() + " грн");
+        }
+
+        function mostExpensive() {
+            return receipt.reduce((max, i) => i.price > max.price ? i : max);
+        }
+
+        function printMostExpensive() {
+            log("Найдорожчий товар: " + mostExpensive().name);
+        }
+
+        function averagePrice() {
+            let totalItems = receipt.reduce((s, i) => s + i.quantity, 0);
+            return totalSum() / totalItems;
+        }
+
+        function printAverage() {
+            log("Середня ціна товару: " + averagePrice().toFixed(2) + " грн");
+        }
+
+        // TASK 3 – CSS STYLES
+        let styles = [
+            { name: "color", value: "red" },
+            { name: "font-size", value: "22px" },
+            { name: "text-decoration", value: "underline" },
+            { name: "font-weight", value: "bold" }
+        ];
+
+        function printStyled() {
+            let styleString = styles.map(s => `${s.name}:${s.value}`).join("; ");
+            document.write(`<p style="${styleString}">Це текст зі стилями!</p>`);
+        }
+
+        // TASK 4 – ROOMS
+        let rooms = [
+            { name: "Ауд. 101", seats: 15, faculty: "Математика" },
+            { name: "Ауд. 202", seats: 20, faculty: "Фізика" },
+            { name: "Ауд. 303", seats: 12, faculty: "Математика" },
+            { name: "Ауд. 404", seats: 18, faculty: "Програмування" }
+        ];
+
+        function showRooms() {
+            let out = "Всі аудиторії:\n";
+            rooms.forEach(r => {
+                out += `${r.name} — ${r.seats} місць — ${r.faculty}\n`;
+            });
+            log(out);
+        }
+
+        function showByFaculty() {
+            let f = prompt("Введіть назву факультету:");
+            let out = rooms
+                .filter(r => r.faculty.toLowerCase() === f.toLowerCase())
+                .map(r => `${r.name} — ${r.seats} місць`)
+                .join("\n");
+
+            log(out || "Немає аудиторій цього факультету");
+        }
+
+        function showForGroup() {
+            let group = {
+                name: prompt("Назва групи:"),
+                students: +prompt("Кількість студентів:"),
+                faculty: prompt("Факультет:")
+            };
+
+            let out = rooms
+                .filter(r =>
+                    r.seats >= group.students &&
+                    r.faculty.toLowerCase() === group.faculty.toLowerCase()
+                )
+                .map(r => `${r.name} — ${r.seats} місць`)
+                .join("\n");
+
+            log(out || "Немає підходящих аудиторій");
+        }
+
+        function sortBySeatsPrint() {
+            let sorted = [...rooms].sort((a, b) => a.seats - b.seats);
+            log(sorted.map(r => `${r.name} — ${r.seats}`).join("\n"));
+        }
+
+        function sortByNamePrint() {
+            let sorted = [...rooms].sort((a, b) => a.name.localeCompare(b.name));
+            log(sorted.map(r => r.name).join("\n"));
+        }
+    </script>
+</body>
+</html>
