@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Async/Await Завдання</title>
+</head>
+
+<body>
+    <script>
+        // Завдання 1
+        function processArray(array, callback) {
+            return array.map(callback);
+        }
+
+        function doubleElement(element) {
+            return element * 2;
+        }
+
+        function reverseElement(element) {
+            return element.toString().split("").reverse().join("");
+        }
+
+        console.log(processArray([1, 2, 3, 4, 5], doubleElement));
+        console.log(processArray(["hello", "world"], reverseElement));
+
+        // Завдання 2
+        function filterArray(array, callback) {
+            return array.filter(callback);
+        }
+
+        function isEven(number) {
+            return number % 2 === 0;
+        }
+
+        function isShortWord(word) {
+            return word.length <= 4;
+        }
+
+        console.log(filterArray([1, 2, 3, 4, 5], isEven));
+        console.log(filterArray(["cat", "elephant", "dog", "bird"], isShortWord));
+
+        // Завдання 3
+        function washDishes() {
+            return new Promise(resolve => {
+                setTimeout(() => resolve("Посуд вимито"), 2000);
+            });
+        }
+
+        function cleanRoom() {
+            return new Promise(resolve => {
+                setTimeout(() => resolve("Кімнату прибрано"), 4000);
+            });
+        }
+
+        function makeDinner() {
+            return new Promise(resolve => {
+                setTimeout(() => resolve("Вечеря приготована"), 7000);
+            });
+        }
+
+        async function doTasks() {
+            try {
+                const dishes = await washDishes();
+                console.log(dishes);
+
+                const room = await cleanRoom();
+                console.log(room);
+
+                const dinner = await makeDinner();
+                console.log(dinner);
+            } catch (error) {
+                console.error("Помилка:", error);
+            }
+        }
+
+        doTasks();
+
+        // Завдання 4
+        function sortArray(array) {
+            return new Promise((resolve, reject) => {
+                if (array.length === 0) {
+                    reject("Масив порожній");
+                } else {
+                    setTimeout(() => {
+                        resolve(array.sort((a, b) => a - b));
+                    }, 2000);
+                }
+            });
+        }
+
+        async function runSort() {
+            try {
+                const sorted = await sortArray([5, 2, 9, 1]);
+                console.log("Відсортовано:", sorted);
+            } catch (error) {
+                console.error("Помилка:", error);
+            }
+        }
+
+        runSort();
+
+        // Завдання 5
+        function multiplyAsync(a, b) {
+            return new Promise((resolve, reject) => {
+                if (typeof a !== "number" || typeof b !== "number") {
+                    reject("Некоректні значення");
+                } else {
+                    setTimeout(() => resolve(a * b), 2000);
+                }
+            });
+        }
+
+        async function runMultiply() {
+            try {
+                const result = await multiplyAsync(6, 9);
+                console.log("Результат множення:", result);
+            } catch (error) {
+                console.error("Помилка:", error);
+            }
+        }
+
+        runMultiply();
+
+        // Завдання 6
+        function sortArrayAsync(array) {
+            return new Promise((resolve, reject) => {
+                if (array.length === 0) {
+                    reject("Масив порожній");
+                } else {
+                    setTimeout(() => {
+                        resolve(array.sort((a, b) => a - b));
+                    }, 2000);
+                }
+            });
+        }
+
+        async function runSortAsync() {
+            try {
+                const sorted = await sortArrayAsync([8, 3, 5, 1]);
+                console.log("Відсортований масив:", sorted);
+            } catch (error) {
+                console.error("Помилка:", error);
+            }
+        }
+
+        runSortAsync();
+    </script>
+</body>
+
+</html>
