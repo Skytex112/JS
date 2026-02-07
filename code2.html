@@ -1,78 +1,44 @@
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <title>Реєстрація користувача</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 40px;
-    }
-    .form-container {
-      max-width: 400px;
-      margin: auto;
-    }
-    label {
-      display: block;
-      margin-top: 10px;
-    }
-    input[type="text"],
-    input[type="email"],
-    input[type="password"] {
-      width: 100%;
-      padding: 8px;
-      margin-top: 5px;
-    }
-    button {
-      margin-top: 15px;
-      padding: 10px;
-      width: 100%;
-    }
-    .message {
-      margin-top: 20px;
-      font-weight: bold;
-      color: blue;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
 </head>
+
 <body>
-  <div class="form-container">
-    <h2>Реєстрація</h2>
-    <form id="signupForm">
-      <label for="email">Ваша пошта:</label>
-      <input type="email" id="email" name="email" required>
+    <script>
+        function onSuccess(result) {
+            console.log("Результат:", result);
+        }
 
-      <label for="login">Ваш логін:</label>
-      <input type="text" id="login" name="login" required>
+        function onError(error) {
+            console.error("Помилка:", error);
+        }
 
-      <label for="password">Ваш пароль:</label>
-      <input type="password" id="password" name="password" required>
+        async function calculate(a, b, onSuccess, onError) {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    if (b === 0) {
+                        reject(new Error("Ділення на нуль заборонено"));
+                    } else {
+                        resolve(a / b);
+                    }
+                }, 100);
+            });
 
-      <label for="confirmPassword">Повторіть пароль:</label>
-      <input type="password" id="confirmPassword" name="confirmPassword" required>
-
-      <button type="submit">Зареєструватися</button>
-    </form>
-
-    <div class="message" id="message"></div>
-  </div>
-
-  <script>
-    document.getElementById('signupForm').addEventListener('submit', function(event) {
-      event.preventDefault();
-
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      const confirmPassword = document.getElementById('confirmPassword').value;
-
-      if (password !== confirmPassword) {
-        document.getElementById('message').textContent = 'Паролі не співпадають. Спробуйте ще раз.';
-        document.getElementById('message').style.color = 'red';
-        return;
-      }
-
-      document.getElementById('message').innerHTML = `<h1>${email} надіслано лист із підтвердженням.</h1>`;
-    });
-  </script>
+        }
+        async function main()
+        {
+            let num = await calculate(10, 2, onSuccess, onError);
+            console.log(num);
+            let num2 = await calculate(10, 0, onSuccess, onError);
+            console.log(num2);
+  
+        }
+        main();
+    </script>
 </body>
+
 </html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+         let returnStatus = -1;
+         let promise = new Promise((resolve, reject) => {
+             serTimeout(() => {
+                 if(returnStatus === 0)
+                 {
+                     resolve("Task finished successfully!");
+                 }
+                 reject(new Error("Task failed!!!"))
+             },2000);
+         })
+        console.log("awaiting promise result");
+        promise.then(console.log,console.log);
+         promise.then(
+             (result) => {
+                 console.log(`then: ${result}`);
+             },
+             (error) => {
+                 console.log(`then: ${error}`);
+             },
+         );
+         promise.catch(
+             (result) => {
+                 console.log(`catch: ${result}`);
+             },
+             (error) => {
+                 console.log(`catch: ${error}`);
+             },
+         );
+         console.log("finished awaiting promise result");
+
+         window.addEventListener('unhandledrejection', (event) => {
+            console.log(`${event.promise} failed: ${event.reason}`)
+
+         });
+
+         function wait(ms)
+         {
+            return new Promise((resolve, reject) => {
+                setTimeout(()=> {
+                    resolve("waiting for" + ms);
+                }, ms);
+            });
+         }
+
+         let promiseAll = Promise.all([
+            wait(1000),
+            wait(2000),
+            wait(3000),
+         ]);
+
+         promiseAll.then(result => console.log(result))
+    </script>
+</body>
+
+</html>

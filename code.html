@@ -4,35 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <style>
-        input{
-            width: 200px;
-            height: 150px;
-        }
-    </style>
 </head>
 <body>
-    <form action="">
-        <input type="text" name="username" placeholder="Введіть ім’я">
-        <input type="password" name="password" placeholder="Пароль">
-        <input type="file" name="photo">
-        <input type="checkbox" id="music" name="interest" value="music">
-        <label for="music">Музика</label>
-        <input type="checkbox" id="sport" name="interest" value="sport">
-        <label for="sport">Спорт</label>
-        <input type="radio" id="male" name="gender" value="male">
-        <label for="male">Чоловіча</label>
-        <input type="radio" id="female" name="gender" value="female">
-        <label for="female">Жіноча</label>
-        <input type="button" value="ШАЛОМ">
-        <input type="button" value="ТЕБЕ">
-        <input type="button" value="БРАТ">
-        
-        <select name="fruits" multiple size="3">
-            <option value="apple">Яблуко</option>
-            <option value="banana">Банан</option>
-        </select>
+    <script>
+        function calculate(a, b)
+        {
+            console.log(`Введено: a = ${a}, b = ${b}`);
+            let promise = new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    if(b === 0)
+                        reject(new Error("Ділення на нуль заборонено"));
+                    else
+                        resolve(a / b);
+                });
+            });
+            return promise;
+        }
 
-    </form>
+        calculate(10, 2).then(result => {
+            console.log("Результат ділення", result)
+        })
+        .catch(error => {
+            console.log("Помилка", error)
+        });
+
+        calculate(10, 0).then(result => {
+            console.log("Результат ділення", result)
+        })
+        .catch(error => {
+            console.log("Помилка", error)
+        });
+
+    </script>
 </body>
 </html>
