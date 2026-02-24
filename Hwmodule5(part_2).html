@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Завдання 5 і 6</title>
+  <style>
+    body { font-family: Arial, sans-serif; }
+    nav button { margin: 5px; }
+    section { display: none; margin-top: 20px; }
+    section.active { display: block; }
+    .list { margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <h1>Завдання 5 і 6</h1>
+  <nav>
+    <button onclick="showSection('attendance')">Відмітка присутніх</button>
+    <button onclick="showSection('train')">Бронювання квитків</button>
+  </nav>
+
+  <!-- Завдання 5 -->
+  <section id="attendance" class="active">
+    <h2>Відмітка присутніх на парі</h2>
+    <form id="attendanceForm">
+      <label>Група:
+        <select id="group">
+          <option value="Група А">Група А</option>
+          <option value="Група Б">Група Б</option>
+        </select>
+      </label><br>
+      <label>Пара:
+        <select id="lesson">
+          <option value="1">1 пара</option>
+          <option value="2">2 пара</option>
+          <option value="3">3 пара</option>
+        </select>
+      </label><br>
+      <label>Тема: <input type="text" id="topic" required></label><br>
+      <p>Відмітьте присутніх:</p>
+      <label><input type="checkbox" name="student" value="Іван"> Іван</label>
+      <label><input type="checkbox" name="student" value="Марія"> Марія</label>
+      <label><input type="checkbox" name="student" value="Олег"> Олег</label><br>
+      <button type="submit">Зберегти</button>
+    </form>
+    <h3>Вже відмічені пари:</h3>
+    <ul id="attendanceList" class="list"></ul>
+  </section>
+
+  <!-- Завдання 6 -->
+  <section id="train">
+    <h2>Бронювання квитків на поїзд</h2>
+    <form id="trainForm">
+      <label>Напрямок:
+        <select id="direction">
+          <option value="Київ-Львів">Київ-Львів</option>
+          <option value="Одеса-Київ">Одеса-Київ</option>
+          <option value="Харків-Дніпро">Харків-Дніпро</option>
+        </select>
+      </label><br>
+      <label>Дата: <input type="date" id="trainDate" required></label><br>
+      <p>Виберіть місця:</p>
+      <label><input type="checkbox" name="seat" value="Місце 1"> Місце 1</label>
+      <label><input type="checkbox" name="seat" value="Місце 2"> Місце 2</label>
+      <label><input type="checkbox" name="seat" value="Місце 3"> Місце 3</label><br>
+      <button type="submit">Забронювати</button>
+    </form>
+    <h3>Вже заброньовані квитки:</h3>
+    <ul id="trainList" class="list"></ul>
+  </section>
+
+  <script>
+    function showSection(id) {
+      document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+
+    const attendanceRecords = [];
+    const trainBookings = [];
+
+    // Завдання 5
+    const attendanceForm = document.getElementById('attendanceForm');
+    const attendanceList = document.getElementById('attendanceList');
+
+    attendanceForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const group = document.getElementById('group').value;
+      const lesson = document.getElementById('lesson').value;
+      const topic = document.getElementById('topic').value;
+      const students = Array.from(document.querySelectorAll('input[name="student"]:checked'))
+                            .map(s => s.value);
+
+      const record = { group, lesson, topic, students };
+      attendanceRecords.push(record);
+
+      const li = document.createElement('li');
+      li.textContent = `${group}, ${lesson} пара, тема: "${topic}". Присутні: ${students.join(", ")}`;
+      attendanceList.appendChild(li);
+
+      attendanceForm.reset();
+    });
+
+    // Завдання 6
+    const trainForm = document.getElementById('trainForm');
+    const trainList = document.getElementById('trainList');
+
+    trainForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const direction = document.getElementById('direction').value;
+      const date = document.getElementById('trainDate').value;
+      const seats = Array.from(document.querySelectorAll('input[name="seat"]:checked'))
+                         .map(s => s.value);
+
+      const booking = { direction, date, seats };
+      trainBookings.push(booking);
+
+      const li = document.createElement('li');
+      li.textContent = `${direction}, дата: ${date}, місця: ${seats.join(", ")}`;
+      trainList.appendChild(li);
+
+      trainForm.reset();
+    });
+  </script>
+</body>
+</html>
