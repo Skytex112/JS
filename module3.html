@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        //Exercise 1
+         class Circle {
+             #radius;
+             constructor(radius = 1) {
+                 this.radius = radius;
+             }
+             get radius() {
+                 return this.#radius;
+             }
+             set radius(value) {
+                 const r = Number(value);
+                 if (!Number.isFinite(r) || r <= 0) {
+                     throw new Error('Радіус має бути додатнім числом');
+                 }
+                 this.#radius = r;
+             }
+             get diameter() {
+                 return this.#radius * 2;
+             }
+             area() {
+                 return Math.PI * this.#radius ** 2;
+             }
+             circumference() {
+                 return 2 * Math.PI * this.#radius;
+             }
+         }
+
+         const c = new Circle(5);
+         console.log('Радіус:', c.radius);
+         console.log('Діаметр:', c.diameter);
+         console.log('Площа:', c.area().toFixed(2));
+         console.log('Довжина:', c.circumference().toFixed(2));
+
+        //Exercise 3
+         class CssClass {
+             constructor(className) {
+                 this.className = className;
+                 this.styles = [];
+             }
+             setStyle(name, value) {
+                 const idx = this.styles.findIndex(s => s.name === name);
+                 if (idx >= 0) this.styles[idx].value = value;
+                 else this.styles.push({ name, value });
+                 return this;
+             }
+             removeStyle(name) {
+                 const idx = this.styles.findIndex(s => s.name === name);
+                 if (idx >= 0) this.styles.splice(idx, 1);
+                 return this;
+             }
+             getCss() {
+                 const body = this.styles.map(s => `  ${s.name}: ${s.value};`).join('\n');
+                 return `.${this.className} {\n${body}\n}`;
+             }
+         }
+         const cardClass = new CssClass('card')
+             .setStyle('width', '320px')
+             .setStyle('border', '1px solid #ddd')
+             .setStyle('border-radius', '10px')
+             .setStyle('padding', '16px');
+         console.log(cardClass.getCss());
+
+    </script>
+</body>
+
+</html>

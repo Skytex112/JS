@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Пошук фільмів (Завдання 1)</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f9f9f9;
+      color: #2c3e50;
+    }
+
+    h2 {
+      text-align: center;
+      color: #34495e;
+    }
+
+    form {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    input, select, button {
+      padding: 8px 12px;
+      font-size: 14px;
+    }
+
+    #results {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .movie {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 15px;
+      margin-bottom: 10px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .movie strong {
+      font-size: 16px;
+      color: #2980b9;
+    }
+
+    .pagination {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .pagination button {
+      margin: 3px;
+      padding: 6px 10px;
+      border: none;
+      background: #3498db;
+      color: #fff;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+
+    .pagination button:hover {
+      background: #2980b9;
+    }
+
+    #details {
+      max-width: 600px;
+      margin: 20px auto;
+      background: #fff;
+      padding: 15px;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+  <h2>🎬 Пошук фільмів</h2>
+
+  <form id="searchForm">
+    <input type="text" id="title" placeholder="Введіть назву фільму">
+    <select id="type">
+      <option value="">Всі</option>
+      <option value="movie">Фільм</option>
+      <option value="series">Серіал</option>
+      <option value="episode">Епізод</option>
+    </select>
+    <button type="submit">🔍 Пошук</button>
+  </form>
+
+  <div id="results"></div>
+  <div class="pagination" id="pagination"></div>
+  <div id="details"></div>
+
+  <script>
+    const apiKey = "bdd29fb7";
+    let currentPage = 1;
+    let currentQuery = "";
+    let currentType = "";
+
+    // Обробка форми
+    document.getElementById("searchForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      currentQuery = document.getElementById("title").value.trim();
+      currentType = document.getElementById("type").value;
+      currentPage = 1;
+      searchMovies();
+    });
+
+    // Пошук фільмів
+    function searchMovies() {
+      fetch(`https://www.omdbapi.com/?apikey=${apiKey}&s=${currentQuery}&type=${currentType}&page=${currentPage}`)
+        .then(res => res.json())
+        .then(data => {
+          const resultsDiv = document.getElementById("results");
+          resultsDiv.innerHTML = "";
+          document.getElementById("details").innerHTML = "";
+
+          if (data.Response === "True") {
+            data.Search.forEach(movie => {
+              const div = document.createElement("div");
+              div.className = "movie";
+              div.innerHTML = `
+                <strong>${movie.Title}</strong> (${movie.Year})<br>
+                <button onclick="showDetails('${movie.imdbID}')">ℹ️ Деталі</button>
+              `;
+              resultsDiv.appendChild(div);
+            });
+            renderPagination(data.totalResults);
+          } else {
+            resultsDiv.innerHTML = "<p>Фільм не знайдено!</p>";
+            document.getElementById("pagination").innerHTML = "";
+          }
+        });
+    }
+
+    // Пагінація
+    function renderPagination(totalResults) {
+      const totalPages = Math.ceil(totalResults / 10);
+      const paginationDiv = document.getElementById("pagination");
+      paginationDiv.innerHTML = "";
+
+      for (let i = 1; i <= totalPages; i++) {
+        const btn = document.createElement("button");
+        btn.textContent = i;
+        btn.onclick = () => {
+          currentPage = i;
+          searchMovies();
+        };
+        paginationDiv.appendChild(btn);
+      }
+    }
+
+    // Деталі фільму
+    function showDetails(id) {
+      fetch(`https://www.omdbapi.com/?apikey=${apiKey}&i=${id}&plot=full`)
+        .then(res => res.json())
+        .then(movie => {
+          const detailsDiv = document.getElementById("details");
+          detailsDiv.innerHTML = `
+            <h3>${movie.Title} (${movie.Year})</h3>
+            <p><strong>Жанр:</strong> ${movie.Genre}</p>
+            <p><strong>Режисер:</strong> ${movie.Director}</p>
+            <p><strong>Актори:</strong> ${movie.Actors}</p>
+            <p><strong>Сюжет:</strong> ${movie.Plot}</p>
+          `;
+        });
+    }
+  </script>
+</body>
+</html>

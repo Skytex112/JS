@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Комплексне завдання</title>
+  <style>
+    body { font-family: Arial, sans-serif; }
+    nav button { margin: 5px; }
+    section { display: none; margin-top: 20px; }
+    section.active { display: block; }
+  </style>
+</head>
+<body>
+  <h1>Виконання завдань</h1>
+  <nav>
+    <button onclick="showSection('forum')">Форум</button>
+    <button onclick="showSection('quiz')">Тест</button>
+    <button onclick="showSection('style')">Стилізований текст</button>
+    <button onclick="showSection('shop')">Магазин книг</button>
+  </nav>
+
+  <!-- Завдання 1 -->
+  <section id="forum" class="active">
+    <h2>Повідомлення на форумі</h2>
+    <ul id="messages"></ul>
+    <form id="messageForm">
+      <input type="text" id="newMessage" placeholder="Ваше повідомлення" required>
+      <button type="submit">Додати</button>
+    </form>
+  </section>
+
+  <!-- Завдання 2 -->
+  <section id="quiz">
+    <h2>Пройдіть тест</h2>
+    <form id="quizForm">
+      <p>1. Столиця України?</p>
+      <label><input type="radio" name="q1" value="Київ"> Київ</label>
+      <label><input type="radio" name="q1" value="Львів"> Львів</label>
+
+      <p>2. 2+2 = ?</p>
+      <label><input type="radio" name="q2" value="4"> 4</label>
+      <label><input type="radio" name="q2" value="5"> 5</label>
+
+      <button type="submit">Перевірити</button>
+    </form>
+    <p id="result"></p>
+  </section>
+
+  <!-- Завдання 3 -->
+  <section id="style">
+    <h2>Стилізований текст</h2>
+    <form id="styleForm">
+      <input type="text" id="textInput" placeholder="Ваш текст" required><br>
+      <label>Колір: <input type="color" id="colorInput"></label><br>
+      <label>Розмір (px): <input type="number" id="sizeInput" value="20"></label><br>
+      <label><input type="checkbox" id="boldInput"> Жирний</label><br>
+      <button type="submit">Показати</button>
+    </form>
+    <p id="styledText"></p>
+  </section>
+
+  <!-- Завдання 4 -->
+  <section id="shop">
+    <h2>Замовлення книги</h2>
+    <form id="orderForm">
+      <label>Книга:
+        <select id="book">
+          <option value="Тарас Бульба">Тарас Бульба</option>
+          <option value="Кобзар">Кобзар</option>
+          <option value="Місто">Місто</option>
+        </select>
+      </label><br>
+      <label>Кількість: <input type="number" id="quantity" value="1" min="1"></label><br>
+      <label>Ім'я: <input type="text" id="name" required></label><br>
+      <label>Дата доставки: <input type="date" id="date" required></label><br>
+      <label>Адреса: <input type="text" id="address" required></label><br>
+      <label>Коментар: <textarea id="comment"></textarea></label><br>
+      <button type="submit">Замовити</button>
+    </form>
+    <p id="confirmation"></p>
+  </section>
+
+  <script>
+    function showSection(id) {
+      document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+
+    // Завдання 1
+    const form = document.getElementById('messageForm');
+    const list = document.getElementById('messages');
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const msg = document.getElementById('newMessage').value;
+      const li = document.createElement('li');
+      li.textContent = msg;
+      list.appendChild(li);
+      form.reset();
+    });
+
+    // Завдання 2
+    const quizForm = document.getElementById('quizForm');
+    const result = document.getElementById('result');
+    quizForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      let score = 0;
+      if (quizForm.q1.value === "Київ") score++;
+      if (quizForm.q2.value === "4") score++;
+      result.textContent = "Правильних відповідей: " + score;
+    });
+
+    // Завдання 3
+    const styleForm = document.getElementById('styleForm');
+    const styledText = document.getElementById('styledText');
+    styleForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      styledText.textContent = document.getElementById('textInput').value;
+      styledText.style.color = document.getElementById('colorInput').value;
+      styledText.style.fontSize = document.getElementById('sizeInput').value + "px";
+      styledText.style.fontWeight = document.getElementById('boldInput').checked ? "bold" : "normal";
+    });
+
+    // Завдання 4
+    const orderForm = document.getElementById('orderForm');
+    const confirmation = document.getElementById('confirmation');
+    orderForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const book = document.getElementById('book').value;
+      const date = document.getElementById('date').value;
+      const address = document.getElementById('address').value;
+      confirmation.textContent = `${name}, дякуємо за замовлення. ${book} буде доставлений у ${date} за адресою ${address}.`;
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Завдання JS</title>
+</head>
+<body>
+  <h2>Завдання 1: Маркер</h2>
+  <div id="markerOutput"></div>
+
+  <h2>Завдання 2: ExtendedDate</h2>
+  <div id="dateOutput"></div>
+
+  <h2>Завдання 3: EmpTable</h2>
+  <div id="empTableOutput"></div>
+
+  <script>
+    // Завдання 1
+    class Marker {
+      constructor(color, inkLevel) {
+        this.color = color;
+        this.inkLevel = inkLevel;
+      }
+
+      print(text) {
+        let result = "";
+        for (let char of text) {
+          if (char !== " ") {
+            if (this.inkLevel >= 0.5) {
+              result += char;
+              this.inkLevel -= 0.5;
+            } else {
+              break;
+            }
+          } else {
+            result += char;
+          }
+        }
+        const output = `<span style="color:${this.color}">${result}</span>`;
+        document.getElementById("markerOutput").innerHTML += output + "<br>";
+      }
+    }
+
+    class RefillableMarker extends Marker {
+      refill(amount) {
+        this.inkLevel = Math.min(this.inkLevel + amount, 100);
+      }
+    }
+
+    const marker = new RefillableMarker("blue", 10);
+    marker.print("Привіт, це тест маркера!");
+    marker.refill(20);
+    marker.print("Після заправки чорнила знову є!");
+
+    //Завдання 2
+    class ExtendedDate extends Date {
+      getTextDate() {
+        const months = [
+          "січня","лютого","березня","квітня","травня","червня",
+          "липня","серпня","вересня","жовтня","листопада","грудня"
+        ];
+        return `${this.getDate()} ${months[this.getMonth()]}`;
+      }
+
+      isFutureOrPresent() {
+        const now = new Date();
+        return this >= now;
+      }
+
+      isLeapYear() {
+        const year = this.getFullYear();
+        return (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
+      }
+
+      getNextDate() {
+        const next = new Date(this);
+        next.setDate(this.getDate() + 1);
+        return next;
+      }
+    }
+
+    const myDate = new ExtendedDate(2026, 1, 7);
+    const dateOutput = document.getElementById("dateOutput");
+    dateOutput.innerHTML += "Дата текстом: " + myDate.getTextDate() + "<br>";
+    dateOutput.innerHTML += "Майбутня або поточна? " + myDate.isFutureOrPresent() + "<br>";
+    dateOutput.innerHTML += "Високосний рік? " + myDate.isLeapYear() + "<br>";
+    dateOutput.innerHTML += "Наступна дата: " + myDate.getNextDate().toLocaleDateString() + "<br>";
+
+    //Завдання 3
+    class Employee {
+      constructor(name, position, age) {
+        this.name = name;
+        this.position = position;
+        this.age = age;
+      }
+    }
+
+    class EmpTable {
+      constructor(employees) {
+        this.employees = employees;
+      }
+
+      getHtml() {
+        let html = "<table border='1' cellpadding='5'><tr><th>Ім'я</th><th>Посада</th><th>Вік</th></tr>";
+        for (let emp of this.employees) {
+          html += `<tr><td>${emp.name}</td><td>${emp.position}</td><td>${emp.age}</td></tr>`;
+        }
+        html += "</table>";
+        return html;
+      }
+    }
+
+    const employees = [
+      new Employee("Іван", "Касир", 25),
+      new Employee("Марія", "Менеджер", 30),
+      new Employee("Олег", "Охоронець", 40)
+    ];
+
+    const empTable = new EmpTable(employees);
+    document.getElementById("empTableOutput").innerHTML = empTable.getHtml();
+  </script>
+</body>
+</html>

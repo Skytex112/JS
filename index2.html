@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>JSON Formatter</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    textarea { width: 400px; height: 150px; }
+    #result { 
+      white-space: pre; 
+      border: 1px solid #838383; 
+      padding: 10px; 
+      margin-top: 10px; 
+      width: 400px; 
+      background: #f9f9f9;
+    }
+    .error { color: red; }
+  </style>
+</head>
+<body>
+  <h2>JSON Formatter</h2>
+  <textarea id="jsonInput" placeholder="Введіть JSON..."></textarea><br>
+  <button onclick="formatJSON()">Форматувати</button>
+  <div id="result"></div>
+
+  <script>
+    function formatJSON() {
+      const input = document.getElementById("jsonInput").value;
+      const result = document.getElementById("result");
+      try {
+        const obj = JSON.parse(input);
+        result.textContent = JSON.stringify(obj, null, 4);
+        result.className = "";
+      } catch (e) {
+        result.textContent = "Помилка: некоректний JSON!";
+        result.className = "error";,
+      }
+    }
+  </script>
+</body>
+</html>
